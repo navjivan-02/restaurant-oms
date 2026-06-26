@@ -3,6 +3,7 @@ const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
+const prisma = require('./config/db');
 
 // Initialize express
 const app = express();
@@ -40,10 +41,15 @@ io.on('connection', (socket) => {
   });
 });
 
+// Test DB connection
+prisma.$connect()
+  .then(() => console.log('✅ Database connected successfully!'))
+  .catch((err) => console.error('❌ Database connection failed:', err));
+
 // Start server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`ROMS Server running on port ${PORT}`);
+  console.log(`🚀 ROMS Server running on port ${PORT}`);
 });
 
 module.exports = { app, io };

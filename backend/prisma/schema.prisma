@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Restaurant {
+  id         Int      @id @default(autoincrement())
+  name       String
+  address    String?
+  phone      String?
+  gstNumber  String?
+  plan       String   @default("basic")
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  users          User[]
+  tables         Table[]
+  menuCategories MenuCategory[]
+  menuItems      MenuItem[]
+  orders         Order[]
+  bills          Bill[]
+}
+
+model User {
+  id           Int        @id @default(autoincrement())
+  name         String
+  email        String     @unique
+  password     String
+  role         String     // admin | waiter | kitchen | billing
+  restaurantId Int
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  orders       Order[]
+}
+
+model Table {
+  id           Int        @id @default(autoincrement())
+  restaurantId Int
+  tableNumber  String
+  capacity     Int        @default(4)
+  status       String     @default("free") // free | occupied
+  createdAt    DateTime   @default(now())
+
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  orders       Order[]
+}
+
+model MenuCategory {
+  id           Int        @id @default(autoincrement())
+  restaurantId Int
+  name         String
+  sortOrder    Int        @default(0)
+  isActive     Boolean    @default(true)
+
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  menuItems    MenuItem[]
+}
+
+model MenuItem {
+  id           Int          @id @default(autoincrement())
+  restaurantId Int
+  categoryId   Int
+  name         String
+  description  String?
+  price        Decimal      @db.Decimal(10, 2)
+  isVeg        Boolean      @default(true)
+  isAvailable  Boolean      @default(true)
+  createdAt    DateTime     @default(now())
+
+  restaurant   Restaurant   @relation(fields: [restaurantId], references: [id])
+  category     MenuCategory @relation(fields: [categoryId], references: [id])
+  orderItems   OrderItem[]
+}
+
+model Order {
+  id           Int         @id @default(autoincrement())
+  restaurantId Int
+  tableId      Int
+  waiterId     Int
+  status       String      @default("pending")
+  // pending | confirmed | preparing | ready | served | billed
+  notes        String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
+  table        Table       @relation(fields: [tableId], references: [id])
+  waiter       User        @relation(fields: [waiterId], references: [id])
+  orderItems   OrderItem[]
+  bill         Bill?
+}
+
+model OrderItem {
+  id           Int       @id @default(autoincrement())
+  orderId      Int
+  menuItemId   Int
+  quantity     Int       @default(1)
+  unitPrice    Decimal   @db.Decimal(10, 2)
+  status       String    @default("pending") // pending | preparing | ready
+  notes        String?
+  createdAt    DateTime  @default(now())
+
+  order        Order     @relation(fields: [orderId], references: [id])
+  menuItem     MenuItem  @relation(fields: [menuItemId], references: [id])
+}
+
+model Bill {
+  id               Int        @id @default(autoincrement())
+  orderId          Int        @unique
+  restaurantId     Int
+  subtotal         Decimal    @db.Decimal(10, 2)
+  gstPercent       Decimal    @default(5.00) @db.Decimal(5, 2)
+  gstAmount        Decimal    @db.Decimal(10, 2)
+  totalAmount      Decimal    @db.Decimal(10, 2)
+  paymentMethod    String?    // cash | upi | card
+  paymentStatus    String     @default("unpaid") // unpaid | paid
+  customerPhone    String?
+  sentViaWhatsapp  Boolean    @default(false)
+  createdAt        DateTime   @default(now())
+
+  order            Order      @relation(fields: [orderId], references: [id])
+  restaurant       Restaurant @relation(fields: [restaurantId], references: [id])
+}
