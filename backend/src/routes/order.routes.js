@@ -16,8 +16,8 @@ router.use(authenticate);
 // Waiter places order
 router.post('/', roleCheck('waiter'), createOrder);
 
-// Kitchen + billing + admin see all orders
-router.get('/', roleCheck('kitchen', 'billing', 'admin'), getOrders);
+// All staff can fetch orders (waiter sees own orders client-side filtered)
+router.get('/', roleCheck('waiter', 'kitchen', 'billing', 'admin'), getOrders);
 
 // Any authenticated user can get single order
 router.get('/:id', getOrderById);
