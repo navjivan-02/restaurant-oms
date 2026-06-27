@@ -11,6 +11,9 @@ import TablesPage from './pages/waiter/TablesPage';
 import MenuPage from './pages/waiter/MenuPage';
 import OrdersPage from './pages/waiter/OrdersPage';
 
+// Kitchen
+import KitchenDisplay from './pages/kitchen/KitchenDisplay';
+
 function App() {
   return (
     <AuthProvider>
@@ -25,9 +28,11 @@ function App() {
             <Route path="/waiter/menu/:tableId" element={<ProtectedRoute><MenuPage /></ProtectedRoute>} />
             <Route path="/waiter/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
 
+            {/* Kitchen */}
+            <Route path="/kitchen/display" element={<ProtectedRoute><KitchenDisplay /></ProtectedRoute>} />
+
             {/* Future issues — placeholders */}
             <Route path="/admin/*"   element={<ProtectedRoute><div className="p-8">Admin — coming soon</div></ProtectedRoute>} />
-            <Route path="/kitchen/*" element={<ProtectedRoute><div className="p-8">Kitchen — coming soon</div></ProtectedRoute>} />
             <Route path="/billing/*" element={<ProtectedRoute><div className="p-8">Billing — coming soon</div></ProtectedRoute>} />
 
             {/* Default */}
