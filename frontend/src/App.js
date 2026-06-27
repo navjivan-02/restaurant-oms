@@ -14,6 +14,9 @@ import OrdersPage from './pages/waiter/OrdersPage';
 // Kitchen
 import KitchenDisplay from './pages/kitchen/KitchenDisplay';
 
+// Billing
+import BillingPage from './pages/billing/BillingPage';
+
 function App() {
   return (
     <AuthProvider>
@@ -31,9 +34,11 @@ function App() {
             {/* Kitchen */}
             <Route path="/kitchen/display" element={<ProtectedRoute><KitchenDisplay /></ProtectedRoute>} />
 
-            {/* Future issues — placeholders */}
-            <Route path="/admin/*"   element={<ProtectedRoute><div className="p-8">Admin — coming soon</div></ProtectedRoute>} />
-            <Route path="/billing/*" element={<ProtectedRoute><div className="p-8">Billing — coming soon</div></ProtectedRoute>} />
+            {/* Billing */}
+            <Route path="/billing/orders" element={<ProtectedRoute><BillingPage /></ProtectedRoute>} />
+
+            {/* Future issues — placeholder */}
+            <Route path="/admin/*" element={<ProtectedRoute><div className="p-8">Admin — coming soon</div></ProtectedRoute>} />
 
             {/* Default */}
             <Route path="*" element={<Navigate to="/login" replace />} />

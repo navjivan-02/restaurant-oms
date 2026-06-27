@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media print {
+  body * { visibility: hidden; }
+  .print-bill, .print-bill * { visibility: visible; }
+  .print-bill { position: absolute; left: 0; top: 0; width: 100%; }
+}

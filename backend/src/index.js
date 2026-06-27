@@ -30,11 +30,13 @@ const authRoutes = require('./routes/auth.routes');
 const menuRoutes = require('./routes/menu.routes');
 const tableRoutes = require('./routes/table.routes');
 const orderRoutes = require('./routes/order.routes');
+const billRoutes  = require('./routes/bill.routes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/tables', tableRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/bills', billRoutes);
 
 // Test route
 app.get('/', (req, res) => {
