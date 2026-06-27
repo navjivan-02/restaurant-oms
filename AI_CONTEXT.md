@@ -169,22 +169,18 @@ restaurant-oms/
 ## 10. Current Project Status
 
 ### Completed
-- [x] Product Requirements Document (PRD)
-- [x] Technical Design Document (TDD)
-- [x] AI Context File (this file)
-- [x] GitHub repo setup (restaurant-oms)
-- [x] Notion workspace setup
-- [x] GitHub Projects board + Milestones
+- [x] Full documentation (PRD, TDD, AI_CONTEXT.md)
+- [x] GitHub repo + project board setup
+- [x] Phase 1 — Core Order Flow (Issues #1-#11)
+  - [x] Backend: Auth, Menu, Tables, Orders APIs
+  - [x] Real-time: Socket.io events
+  - [x] Frontend: Login, Waiter UI, Kitchen UI, Billing UI
 
-### In Progress
-- [ ] GitHub Issues for Phase 1
-- [ ] Database schema (Prisma)
-- [ ] Backend setup (Node.js + Express)
-
-### Not Started
-- [ ] Phase 1 — Core Order Flow
+### Next Up
 - [ ] Phase 2 — Bills & Notifications
-- [ ] Phase 3 — Admin & Analytics
+  - [ ] GST bill generation
+  - [ ] Thermal printer support
+  - [ ] WhatsApp/SMS bill delivery
 
 ---
 
