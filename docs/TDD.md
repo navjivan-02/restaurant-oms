@@ -536,3 +536,4 @@ REACT_APP_SOCKET_URL=http://localhost:5000
 - [ ] Should bill PDF be generated server-side or client-side (browser print)?
 - [ ] Which WhatsApp provider for India — Twilio, Gupshup, or Interakt?
 - [ ] Do we need a job queue (Bull) for sending WhatsApp messages async?
+- [ ] Item-level status tracking — deferred to Phase 2
