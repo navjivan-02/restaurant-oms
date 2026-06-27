@@ -21,6 +21,10 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
+// Routes
+const authRoutes = require('./routes/auth.routes');
+app.use('/api/auth', authRoutes);
+
 // Test route
 app.get('/', (req, res) => {
   res.json({ message: 'ROMS API is running!' });
