@@ -24,9 +24,11 @@ app.use(express.json());
 // Routes
 const authRoutes = require('./routes/auth.routes');
 const menuRoutes = require('./routes/menu.routes');
+const tableRoutes = require('./routes/table.routes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/menu', menuRoutes);
+app.use('/api/tables', tableRoutes);
 
 // Test route
 app.get('/', (req, res) => {
