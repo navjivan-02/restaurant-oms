@@ -1,4 +1,5 @@
 const prisma = require('../config/db');
+const { getIo } = require('../config/socket');
 
 // POST /api/orders — place new order (waiter)
 const createOrder = async (req, res) => {
@@ -60,10 +61,19 @@ const createOrder = async (req, res) => {
     });
 
     // Update table status to occupied
-    await prisma.table.update({
+    const occupiedTable = await prisma.table.update({
       where: { id: tableId },
       data: { status: 'occupied' }
     });
+
+    // Reflect the updated table status in the response
+    order.table = occupiedTable;
+
+    // Notify kitchen and billing about the new order
+    const io = getIo();
+    const room = `restaurant_${restaurantId}`;
+    io.to(room).emit('order:new', order);
+    io.to(room).emit('table:status_updated', occupiedTable);
 
     res.status(201).json({ order, message: 'Order placed successfully' });
 
@@ -164,13 +174,20 @@ const updateOrderStatus = async (req, res) => {
       }
     });
 
+    const io = getIo();
+    const room = `restaurant_${restaurantId}`;
+
     // If order is billed → free up the table
     if (status === 'billed') {
-      await prisma.table.update({
+      const freedTable = await prisma.table.update({
         where: { id: order.tableId },
         data: { status: 'free' }
       });
+      io.to(room).emit('table:status_updated', freedTable);
     }
+
+    // Notify waiter and billing about the status change
+    io.to(room).emit('order:status_updated', order);
 
     res.json({ order, message: `Order status updated to ${status}` });
 

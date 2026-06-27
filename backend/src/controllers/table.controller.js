@@ -1,4 +1,5 @@
 const prisma = require('../config/db');
+const { getIo } = require('../config/socket');
 
 // GET /api/tables — get all tables with status
 const getTables = async (req, res) => {
@@ -130,6 +131,9 @@ const updateTableStatus = async (req, res) => {
       where: { id: parseInt(id) },
       data: { status }
     });
+
+    // Notify all clients in the restaurant room about the table status change
+    getIo().to(`restaurant_${restaurantId}`).emit('table:status_updated', table);
 
     res.json({ table, message: `Table marked as ${status}` });
 

@@ -4,6 +4,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
 const prisma = require('./config/db');
+const { setIo } = require('./config/socket');
 
 // Initialize express
 const app = express();
@@ -16,6 +17,9 @@ const io = new Server(server, {
     methods: ['GET', 'POST']
   }
 });
+
+// Register io instance so controllers can emit events without circular deps
+setIo(io);
 
 // Middleware
 app.use(cors());
